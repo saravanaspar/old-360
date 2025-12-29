@@ -10,8 +10,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- QT SETUP ---
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+# ADDED 'Sensors' component here
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sensors)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sensors)
 
 # --- OPENCV SETUP (Auto-Detect Platform) ---
 if(WIN32)
@@ -19,13 +20,13 @@ if(WIN32)
     set(OpenCV_DIR "C:/Users/SaravanaKumar/Downloads/opencv/build")
 else()
     # Linux (Jetson): Use the system installation
-    # On Jetson, OpenCV is usually installed in /usr/include/opencv4
     find_package(OpenCV REQUIRED)
 endif()
 
 find_package(OpenCV REQUIRED)
 
 # --- SOURCE FILES ---
+# ADDED 'gyrocontroller' files here
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -33,7 +34,9 @@ set(PROJECT_SOURCES
         mainwindow.ui
         smartcameraview.cpp
         smartcameraview.h
-        resources.qrc
+        gyrocontroller.cpp
+        gyrocontroller.h
+        # resources.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -42,9 +45,14 @@ else()
     add_executable(VehiclePro7 ${PROJECT_SOURCES})
 endif()
 
+# --- THE FIX: Tell compiler where to find header files ---
+target_include_directories(VehiclePro7 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 # --- LINK LIBRARIES ---
+# ADDED 'Qt::Sensors' library here
 target_link_libraries(VehiclePro7 PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Sensors
     ${OpenCV_LIBS}
 )
 

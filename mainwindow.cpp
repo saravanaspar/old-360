@@ -1,21 +1,26 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QtGlobal> // Required for setting environment variables
+#include <QtGlobal>
 
 // =========================================================
-// YOUR CAMERA LINKS
+// YOUR CAMERA LINKS (8 Cameras)
 // =========================================================
 const std::string RTSP_LINKS[] = {
-    // --- SURROUND VIEW (Active Cameras) ---
+    // --- SURROUND VIEW (0-3) ---
     "rtsp://192.168.1.154:8554/cam",   // ID 0: Front
     "rtsp://192.168.1.235:8554/cam",   // ID 1: Back
     "rtsp://192.168.1.222:8554/cam",   // ID 2: Left
     "rtsp://192.168.1.228:8554/cam",   // ID 3: Right
 
-    // --- WHEELS & SKY (Empty for now) ---
-    "",  // ID 4: Wheel Left
-    "",  // ID 5: Wheel Right
-    ""   // ID 6: Sky
+    // --- WHEELS PAGE (4-5 & NEW 7) ---
+    "",  // ID 4: Front Left Wheel
+    "",  // ID 5: Front Right Wheel
+
+    // --- SKY VIEW (6) ---
+    "",   // ID 6: Sky
+
+    // --- NEW: FRONT UNDERCARRIAGE (7) ---
+    ""    // ID 7: Front Below (Add your IP here!)
 };
 
 MainWindow::MainWindow(QWidget *parent)
@@ -23,17 +28,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    // =========================================================
-    // 1. FORCE TCP CONNECTION (Fixes "h264 error" & Artifacts)
-    // =========================================================
-    // This tells FFmpeg to use TCP instead of UDP.
-    // TCP guarantees packet delivery, preventing grey/green glitches.
     qputenv("OPENCV_FFMPEG_CAPTURE_OPTIONS", "rtsp_transport;tcp");
 
-    // =========================================================
-    // 2. PRO DARK THEME
-    // =========================================================
+    // --- STYLING ---
     this->setStyleSheet(R"(
         QMainWindow { background-color: #121212; }
         QWidget#centralwidget { background-color: #121212; }
@@ -52,9 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
         QLabel { color: white; font-family: "Segoe UI", sans-serif; }
     )");
 
-    // =========================================================
-    // 3. SETUP CAMERAS & SIGNALS
-    // =========================================================
+    // --- SETUP IDS ---
     ui->camFront->setCameraId(0);
     ui->camBack->setCameraId(1);
     ui->camLeft->setCameraId(2);
@@ -62,13 +57,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->camWheelLeft->setCameraId(4);
     ui->camWheelRight->setCameraId(5);
     ui->camSky->setCameraId(6);
+    ui->camFrontUnder->setCameraId(7);
 
+    // --- CONNECT SIGNALS ---
     connect(ui->camFront, &SmartCameraView::tapped, this, &MainWindow::onCameraTapped);
     connect(ui->camBack,  &SmartCameraView::tapped, this, &MainWindow::onCameraTapped);
     connect(ui->camLeft,  &SmartCameraView::tapped, this, &MainWindow::onCameraTapped);
     connect(ui->camRight, &SmartCameraView::tapped, this, &MainWindow::onCameraTapped);
     connect(ui->camWheelLeft,  &SmartCameraView::tapped, this, &MainWindow::onCameraTapped);
     connect(ui->camWheelRight, &SmartCameraView::tapped, this, &MainWindow::onCameraTapped);
+    connect(ui->camSky, &SmartCameraView::tapped, this, &MainWindow::onCameraTapped);
+    connect(ui->camFrontUnder, &SmartCameraView::tapped, this, &MainWindow::onCameraTapped);
     connect(ui->camFullScreen, &SmartCameraView::tapped, this, &MainWindow::goBackToGrid);
 
     connect(ui->btnNavGrid, &QPushButton::clicked, this, &MainWindow::showPageGrid);
@@ -76,15 +75,21 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnNavSky, &QPushButton::clicked, this, &MainWindow::showPageSky);
     connect(ui->btnNavBird, &QPushButton::clicked, this, &MainWindow::showPageBird);
 
-    // =========================================================
-    // 4. OPEN CAMERAS
-    // =========================================================
-    for(int i=0; i<7; i++) {
-        if (RTSP_LINKS[i].empty()) continue;
+    // --- NEW: GYRO SETUP ---
+    gyro = new GyroController(this);
+    connect(gyro, &GyroController::tiltChanged, this, [=](float x, float y){
+        // Only allow pan when in Full Screen mode
+        if (ui->stackedWidget->currentWidget() == ui->pageFull) {
+            ui->camFullScreen->applyPan(x, y);
+        }
+    });
+    gyro->start();
 
-        // Open stream (TCP is forced by the qputenv line above)
+    // --- OPEN CAMERAS ---
+    for(int i=0; i<8; i++) {
+        if (RTSP_LINKS[i].empty()) continue;
         caps[i].open(RTSP_LINKS[i], cv::CAP_FFMPEG);
-        caps[i].set(cv::CAP_PROP_BUFFERSIZE, 1); // Low latency
+        caps[i].set(cv::CAP_PROP_BUFFERSIZE, 1);
     }
 
     timer = new QTimer(this);
@@ -94,7 +99,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() { delete ui; }
 
-// --- NAVIGATION ---
 void MainWindow::onCameraTapped(int id) {
     lastPage = ui->stackedWidget->currentWidget();
     activeFullId = id;
@@ -113,7 +117,6 @@ void MainWindow::showPageWheels() { ui->stackedWidget->setCurrentWidget(ui->page
 void MainWindow::showPageSky()    { ui->stackedWidget->setCurrentWidget(ui->pageSky); }
 void MainWindow::showPageBird()   { ui->stackedWidget->setCurrentWidget(ui->pageBirdsEye); }
 
-// --- STREAMING LOOP ---
 void MainWindow::updateStreams() {
     cv::Mat frame;
     QWidget* currentPage = ui->stackedWidget->currentWidget();
@@ -124,9 +127,9 @@ void MainWindow::updateStreams() {
             return;
         }
         if(caps[id].read(frame)) {
-            cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
-            QImage qimg((const unsigned char*)frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
-            view->setFrame(qimg);
+             cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
+             QImage qimg((const unsigned char*)frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+             view->setFrame(qimg);
         }
     };
 
@@ -142,8 +145,15 @@ void MainWindow::updateStreams() {
     else if (currentPage == ui->pageWheels) {
         updateView(4, ui->camWheelLeft);
         updateView(5, ui->camWheelRight);
+        updateView(7, ui->camFrontUnder);
     }
     else if (currentPage == ui->pageSky) {
         updateView(6, ui->camSky);
+    }
+    else if (currentPage == ui->pageBirdsEye) {
+        updateView(0, ui->stitchFront);
+        updateView(1, ui->stitchBack);
+        updateView(2, ui->stitchLeft);
+        updateView(3, ui->stitchRight);
     }
 }

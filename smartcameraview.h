@@ -17,6 +17,9 @@ public:
     int  getCameraId() const { return m_id; }
     void resetZoom();
 
+    // --- NEW: Added this function ---
+    void applyPan(float xTilt, float yTilt);
+
 signals:
     void tapped(int id);
 
@@ -30,6 +33,10 @@ private:
     qreal m_currentScaleFactor;
     QImage m_currentImage;
     bool m_isPinching;
+
+    // --- NEW: Added these variables ---
+    float m_panX;
+    float m_panY;
 };
 
 #endif // SMARTCAMERAVIEW_H
