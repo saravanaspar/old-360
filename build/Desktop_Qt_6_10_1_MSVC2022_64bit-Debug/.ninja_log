@@ -1,0 +1,10 @@
+# ninja log v6
+29	182	7884328595086157	VehiclePro7_autogen/timestamp	3788b4a3b5ce1964
+29	182	7884328595086157	VehiclePro7_autogen/mocs_compilation.cpp	3788b4a3b5ce1964
+29	182	7884328595086157	D:/qt/qtprojects/VehiclePro7/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/VehiclePro7_autogen/mocs_compilation.cpp	3788b4a3b5ce1964
+29	182	7884328595086157	D:/qt/qtprojects/VehiclePro7/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/VehiclePro7_autogen/timestamp	3788b4a3b5ce1964
+611	4422	7883570697830940	CMakeFiles/VehiclePro7.dir/main.cpp.obj	bb3f63a75b3b3770
+166	2564	7884321314498213	CMakeFiles/VehiclePro7.dir/smartcameraview.cpp.obj	75359d50f2a533ab
+183	3940	7884328596627355	CMakeFiles/VehiclePro7.dir/mainwindow.cpp.obj	784fc52b7b4e4ebe
+607	4429	7883570697791284	CMakeFiles/VehiclePro7.dir/VehiclePro7_autogen/mocs_compilation.cpp.obj	430a7b1d486b9fea
+3940	4248	7884328634207214	VehiclePro7.exe	8a73858dab812542

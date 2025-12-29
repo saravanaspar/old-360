@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>630</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout"/>
+    </item>
+    <item row="1" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QStackedWidget" name="stackedWidget">
+        <widget class="QWidget" name="pageGrid">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="SmartCameraView" name="camFront">
+            <property name="text">
+             <string>camFront</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="SmartCameraView" name="camRight">
+            <property name="text">
+             <string>camRight</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="SmartCameraView" name="camLeft">
+            <property name="text">
+             <string>camLeft</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="SmartCameraView" name="camBack">
+            <property name="text">
+             <string>camBack</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageWheels">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="SmartCameraView" name="camWheelLeft">
+            <property name="text">
+             <string>camWheelLeft</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="SmartCameraView" name="camWheelRight">
+            <property name="text">
+             <string>camWheelRight</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageSky">
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="SmartCameraView" name="camSky">
+            <property name="text">
+             <string>camSky</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageBirdsEye">
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblStitch">
+            <property name="text">
+             <string>lblStitch</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageFull">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="SmartCameraView" name="camFullScreen">
+            <property name="text">
+             <string>camFullScreen</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QPushButton" name="btnNavGrid">
+          <property name="text">
+           <string>btnNavGrid</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNavWheels">
+          <property name="text">
+           <string>btnNavWheels</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNavSky">
+          <property name="text">
+           <string>btnNavSky</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnNavBird">
+          <property name="text">
+           <string>btnNavBird</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SmartCameraView</class>
+   <extends>QLabel</extends>
+   <header>smartcameraview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

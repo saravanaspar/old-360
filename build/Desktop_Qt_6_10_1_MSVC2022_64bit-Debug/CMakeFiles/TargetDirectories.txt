@@ -1,0 +1,5 @@
+D:/qt/qtprojects/VehiclePro7/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/VehiclePro7.dir
+D:/qt/qtprojects/VehiclePro7/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/edit_cache.dir
+D:/qt/qtprojects/VehiclePro7/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/rebuild_cache.dir
+D:/qt/qtprojects/VehiclePro7/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/VehiclePro7_autogen_timestamp_deps.dir
+D:/qt/qtprojects/VehiclePro7/build/Desktop_Qt_6_10_1_MSVC2022_64bit-Debug/CMakeFiles/VehiclePro7_autogen.dir
