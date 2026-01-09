@@ -2,10 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTimer>
 #include <opencv2/opencv.hpp>
+#include <vector>
 #include "smartcameraview.h"
-#include "gyrocontroller.h" // <--- Added Header
+#include "gyrocontroller.h"
+#include "cameraworker.h" // <--- Include the new worker
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,9 +21,11 @@ public:
     ~MainWindow();
 
 private slots:
-    void updateStreams();
+    void handleFrame(int id, QImage frame); // <--- New Slot
     void onCameraTapped(int id);
     void goBackToGrid();
+
+    // Navigation
     void showPageGrid();
     void showPageWheels();
     void showPageSky();
@@ -30,11 +33,13 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *timer;
-    cv::VideoCapture caps[8]; // Your 8 Cameras
+
+    // Manage Workers
+    std::vector<QThread*> threads;
+    std::vector<CameraWorker*> workers;
+
     int activeFullId = -1;
     QWidget *lastPage = nullptr;
-
-    GyroController *gyro; // <--- Added Gyro Object
+    GyroController *gyro;
 };
 #endif // MAINWINDOW_H

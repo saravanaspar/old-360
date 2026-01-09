@@ -15,147 +15,8 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout"/>
-    </item>
     <item row="1" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QStackedWidget" name="stackedWidget">
-        <widget class="QWidget" name="pageGrid">
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="1">
-           <widget class="SmartCameraView" name="camBack">
-            <property name="text">
-             <string>camBack</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="SmartCameraView" name="camLeft">
-            <property name="text">
-             <string>camLeft</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="SmartCameraView" name="camRight">
-            <property name="text">
-             <string>camRight</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="SmartCameraView" name="camFront">
-            <property name="text">
-             <string>camFront</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="pageWheels">
-         <layout class="QGridLayout" name="gridLayout_6">
-          <item row="0" column="0">
-           <widget class="SmartCameraView" name="camWheelLeft">
-            <property name="text">
-             <string>camWheelLeft</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="SmartCameraView" name="camFrontUnder">
-            <property name="text">
-             <string>camUnder</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="SmartCameraView" name="camWheelRight">
-            <property name="text">
-             <string>camWheelRight</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="pageSky">
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <widget class="SmartCameraView" name="camSky">
-            <property name="text">
-             <string>camSky</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="pageBirdsEye">
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="1">
-           <widget class="SmartCameraView" name="stitchFront">
-            <property name="text">
-             <string>stitchFront</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="SmartCameraView" name="stitchLeft">
-            <property name="text">
-             <string>stitchLeft</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="SmartCameraView" name="stitchRight">
-            <property name="text">
-             <string>stitchRight</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="SmartCameraView" name="stitchBack">
-            <property name="text">
-             <string>stitchBack</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="pageFull">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="SmartCameraView" name="camFullScreen">
-            <property name="text">
-             <string>camFullScreen</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </widget>
-      </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
@@ -189,6 +50,145 @@
        </layout>
       </item>
      </layout>
+    </item>
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <widget class="QWidget" name="pageGrid">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="1" column="1">
+         <widget class="SmartCameraView" name="camBack">
+          <property name="text">
+           <string>camBack</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="SmartCameraView" name="camLeft">
+          <property name="text">
+           <string>camLeft</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="SmartCameraView" name="camRight">
+          <property name="text">
+           <string>camRight</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="SmartCameraView" name="camFront">
+          <property name="text">
+           <string>camFront</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageWheels">
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0" colspan="2">
+         <widget class="SmartCameraView" name="camFrontUnder">
+          <property name="text">
+           <string>camUnder</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="SmartCameraView" name="camWheelLeft">
+          <property name="text">
+           <string>camWheelLeft</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="SmartCameraView" name="camWheelRight">
+          <property name="text">
+           <string>camWheelRight</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageSky">
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="SmartCameraView" name="camSky">
+          <property name="text">
+           <string>camSky</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageBirdsEye">
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="1">
+         <widget class="SmartCameraView" name="stitchFront">
+          <property name="text">
+           <string>stitchFront</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="SmartCameraView" name="stitchLeft">
+          <property name="text">
+           <string>stitchLeft</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="SmartCameraView" name="stitchRight">
+          <property name="text">
+           <string>stitchRight</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="SmartCameraView" name="stitchBack">
+          <property name="text">
+           <string>stitchBack</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageFull">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="SmartCameraView" name="camFullScreen">
+          <property name="text">
+           <string>camFullScreen</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>

@@ -1,61 +1,103 @@
 cmake_minimum_required(VERSION 3.16)
+project(VehiclePro7 LANGUAGES CXX)
 
-project(VehiclePro7 VERSION 0.1 LANGUAGES CXX)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
+# ----------------------------------------------------
+# C++
+# ----------------------------------------------------
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# --- QT SETUP ---
-# ADDED 'Sensors' component here
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sensors)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sensors)
+# ----------------------------------------------------
+# Qt 5
+# ----------------------------------------------------
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
-# --- OPENCV SETUP (Auto-Detect Platform) ---
-if(WIN32)
-    # Windows: Use your specific path
-    set(OpenCV_DIR "C:/Users/SaravanaKumar/Downloads/opencv/build")
-else()
-    # Linux (Jetson): Use the system installation
-    find_package(OpenCV REQUIRED)
-endif()
+find_package(Qt5 REQUIRED COMPONENTS Widgets Sensors)
 
+# ----------------------------------------------------
+# OpenCV
+# ----------------------------------------------------
 find_package(OpenCV REQUIRED)
+message(STATUS "OpenCV version: ${OpenCV_VERSION}")
 
-# --- SOURCE FILES ---
-# ADDED 'gyrocontroller' files here
-set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        smartcameraview.cpp
-        smartcameraview.h
-        gyrocontroller.cpp
-        gyrocontroller.h
-        # resources.qrc
+# ----------------------------------------------------
+# CUDA (Jetson – manual, correct way)
+# ----------------------------------------------------
+set(CUDA_TOOLKIT_ROOT_DIR /usr/local/cuda)
+
+include_directories(
+    /usr/local/cuda/include
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(VehiclePro7 MANUAL_FINALIZATION ${PROJECT_SOURCES})
-else()
-    add_executable(VehiclePro7 ${PROJECT_SOURCES})
+link_directories(
+    /usr/local/cuda/lib64
+)
+
+# ----------------------------------------------------
+# TensorRT
+# ----------------------------------------------------
+set(TENSORRT_INCLUDE_DIR /usr/include/aarch64-linux-gnu)
+set(TENSORRT_LIBRARY_DIR /usr/lib/aarch64-linux-gnu)
+
+find_library(NVINFER_LIB nvinfer HINTS ${TENSORRT_LIBRARY_DIR})
+find_library(NVINFER_PLUGIN_LIB nvinfer_plugin HINTS ${TENSORRT_LIBRARY_DIR})
+
+if (NOT NVINFER_LIB)
+    message(FATAL_ERROR "TensorRT (nvinfer) not found")
 endif()
 
-# --- THE FIX: Tell compiler where to find header files ---
-target_include_directories(VehiclePro7 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+# ----------------------------------------------------
+# Executable
+# ----------------------------------------------------
+add_executable(VehiclePro7
+    main.cpp
 
-# --- LINK LIBRARIES ---
-# ADDED 'Qt::Sensors' library here
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
+
+    smartcameraview.cpp
+    smartcameraview.h
+
+    cameraworker.cpp
+    cameraworker.h
+
+    trt_yolo.cpp
+    trt_yolo.h
+
+    gyrocontroller.cpp
+    gyrocontroller.h
+)
+
+# ----------------------------------------------------
+# Include directories
+# ----------------------------------------------------
+target_include_directories(VehiclePro7 PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${OpenCV_INCLUDE_DIRS}
+    ${TENSORRT_INCLUDE_DIR}
+    /usr/local/cuda/include
+)
+
+# ----------------------------------------------------
+# Link libraries
+# ----------------------------------------------------
 target_link_libraries(VehiclePro7 PRIVATE
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Sensors
+    Qt5::Widgets
+    Qt5::Sensors
     ${OpenCV_LIBS}
+    ${NVINFER_LIB}
+    ${NVINFER_PLUGIN_LIB}
+    cudart
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(VehiclePro7)
-endif()
+# ----------------------------------------------------
+# Runtime files
+# ----------------------------------------------------
+file(COPY ${CMAKE_SOURCE_DIR}/yolov5s.engine
+     DESTINATION ${CMAKE_BINARY_DIR})
+
+file(COPY ${CMAKE_SOURCE_DIR}/coco.names
+     DESTINATION ${CMAKE_BINARY_DIR})
